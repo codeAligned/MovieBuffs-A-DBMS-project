@@ -9,6 +9,13 @@ public class Movie {
 	long imdbid;
 	int movieid;
 	List<String> genre;
+	String genres;
+	public String getGenres() {
+		return genres;
+	}
+	public void setGenres(String genres) {
+		this.genres = genres;
+	}
 	double avgRating;
 	
 	public double getAvgRating() {
@@ -46,6 +53,11 @@ public class Movie {
 	}
 	public void setGenre(List<String> genre) {
 		this.genre = genre;
+	}
+	@Override
+	public String toString() {
+		return "<td>" + title + "</td><td>" + tmdbid + "</td><td>" + imdbid + "</td><td>" + movieid
+				+ "</td><td>" + genre + "</td><td>" + avgRating + "</td>";
 	}
 	
 	

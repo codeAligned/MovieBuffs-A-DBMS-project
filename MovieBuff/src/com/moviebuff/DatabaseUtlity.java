@@ -1,6 +1,7 @@
 package com.moviebuff;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -106,4 +107,52 @@ public class DatabaseUtlity {
 		}
 		
 	}
+	
+	public List<Movie> getTopMovies() {
+		
+		try {
+			 
+            Statement statement = connection.createStatement();
+            String query = "select avg(R.rating) Avg, M.title, M.movieid,M.tmdbid, M.imdbid from public.\"Ratings\" R, public.\"Movies\" M where R.movieid=M.movieid group by M.movieid order by Avg desc limit 100";
+            
+            ResultSet resultSet = statement.executeQuery(query);
+            List<Movie> movieList = new ArrayList<>();
+            System.out.println("xxx");
+            while (resultSet.next()) {
+            	Movie movie = new Movie();
+            	movie.setTitle(resultSet.getString("title"));
+            	movie.setAvgRating(Double.parseDouble(resultSet.getString("Avg")));
+            	movie.setMovieid(Integer.parseInt(resultSet.getString("movieid")));
+            	if(resultSet.getString("tmdbid") != null)
+            		movie.setTmdbid(Long.parseLong(resultSet.getString("tmdbid")));
+            	if(resultSet.getString("imdbid") != null)
+            		movie.setImdbid(Long.parseLong(resultSet.getString("imdbid")));
+            	movieList.add(movie);
+            }
+            //append genres
+            for (Movie movie : movieList) {
+            	int movieId = movie.getMovieid();
+            	String genrequery = "select G.genre_name from public.\"Genre\" G, public.\"MovieGenre\" MG where MG.movieid = " + movieId + " AND MG.genreid = G.genreid";
+            	ResultSet genreSet = statement.executeQuery(genrequery);
+            	
+            	StringBuilder genreSB = new StringBuilder();
+            	while(genreSet.next()){
+            		genreSB.append(genreSet.getString("genre_name"));
+            		if(!genreSet.isLast())
+            			genreSB.append(", ");
+            	}
+            	movie.setGenres(genreSB.toString());
+			}
+            
+            System.out.println("Movie size " + movieList.size());
+            
+            return movieList;
+        }  catch (SQLException e) {
+            System.out.println("Connection failure.");
+            e.printStackTrace();
+            return null;
+        }
+		
+	}
+	
 }
