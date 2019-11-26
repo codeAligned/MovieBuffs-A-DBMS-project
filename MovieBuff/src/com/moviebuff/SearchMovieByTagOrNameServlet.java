@@ -2,12 +2,15 @@ package com.moviebuff;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.moviebuff.objects.Movie;
 
 
 /**
@@ -44,9 +47,9 @@ public class SearchMovieByTagOrNameServlet extends HttpServlet {
 		Connection conn = DatabaseConnector.getInstance().con;
 		DatabaseUtlity dbUtility = new DatabaseUtlity(conn);
 		
-		String str = dbUtility.showMoviesByNameOrTag(radioButtonVal, searchText);
+		List<Movie> listOfMovies = dbUtility.showMoviesByNameOrTag(radioButtonVal, searchText);
 		//String str = "sfwsfew";
-		request.setAttribute("movieSearch",str);
+		request.setAttribute("ListOfMovies",listOfMovies);
 		request.getRequestDispatcher("MovieSearchResult.jsp").forward(request, response); 
 	}
 

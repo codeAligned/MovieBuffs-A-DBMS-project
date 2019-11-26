@@ -5,6 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.moviebuff.objects.Movie;
 
 public class DatabaseUtlity {
 	
@@ -42,49 +46,64 @@ public class DatabaseUtlity {
         return resp;
 	}
 
-	public String showMoviesByNameOrTag(String radioButtonVal, String searchText) {
+	public List<Movie> showMoviesByNameOrTag(String radioButtonVal, String searchText) {
 		 
 		 ResultSet resultSet;
 		 StringBuilder sb = new StringBuilder();
 		 String sqlQuery = "";
+		 List<Movie> movieList = new ArrayList<Movie>();
 		 try {
 			Statement statement = connection.createStatement();
 			 PreparedStatement ps = null;
-			 
 			 if(radioButtonVal.equals(TAG)) {
-			 	sqlQuery = "select  M.title\r\n" + 
-			 			"from public.\"Movies\" M, public.\"Tags\" T\r\n" + 
-			 			"where T.movieid=M.movieid and T.tag= ? ";
+				 sqlQuery = "select M.title, Avg(R.rating) \r\n" + 
+				 		"from public.\"User\" U, public.\"Movies\" M, public.\"Ratings\" R, public.\"Tags\" T \r\n" + 
+				 		"where R.userid=U.\"userId\" and R.movieid=M.movieid and T.movieid=M.movieid\r\n" + 
+				 		"and T.\"tag\"= ? \r\n" + 
+				 		"Group by M.movieid";
 			 	ps = connection.prepareStatement(sqlQuery);
 			 	ps.setString(1, searchText);
-			 	//resultSet= statement.executeQuery("SELECT * FROM public.\"Genre\"");
 			 	resultSet = ps.executeQuery();
-			 	 while (resultSet.next()) {
-			       	//String s =  resultSet.getString("genreId") + resultSet.getString("genre_name");
-			       	String s =  resultSet.getString("title");
-			       	s = s + "\n";
-			           sb = sb.append(s);
-			       }
+			 	addToMovieList(resultSet, movieList);
+			 	 
 			 } else if (radioButtonVal.equals(NAME)) {
 			 	sqlQuery = "select  M.title, M.movieid\r\n" + 
 			 			"from public.\"Movies\" M\r\n" + 
 			 			"where M.title= ?";
+			 	
+			 	sqlQuery = "select M.title, Avg(R.rating)\r\n" + 
+			 			"from  public.\"Movies\" M, public.\"Ratings\" R\r\n" + 
+			 			"where   R.movieid=M.movieid and  M.\"title\"= ?\r\n" + 
+			 			"Group by M.movieid";
 			 	ps = connection.prepareStatement(sqlQuery);
 			 	ps.setString(1, searchText);
-			 	//resultSet= statement.executeQuery("SELECT * FROM public.\"Genre\"");
 			 	resultSet= ps.executeQuery();
-			 	 while (resultSet.next()) {
-			      	//String s =  resultSet.getString("genreId") + resultSet.getString("genre_name");
-			      	String s =  resultSet.getString("title") + resultSet.getString("movieid");
-			      	s = s + "\n";
-			          sb = sb.append(s);
-			      }
+			 	addToMovieList(resultSet, movieList);
 			 	
 			 }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+         return movieList;
+	}
+
+	private void addToMovieList(ResultSet resultSet, List<Movie> movieList) {
+		try {
+			while (resultSet.next()) {
+				 Movie m = new Movie();
+				 m.setTitle(resultSet.getString("title"));
+				 m.setAvgRating(Double.parseDouble(resultSet.getString("avg")));
+
+				 movieList.add(m);
+				 
+			}
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-         return sb.toString();
+		
 	}
 }
