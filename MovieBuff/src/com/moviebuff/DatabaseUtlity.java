@@ -167,7 +167,7 @@ public class DatabaseUtlity {
 	}
 	
 	public void fetchUserId(String userName) {
-		String userId = "";
+		Integer userId = 0;
 		String sqlQuery = "";
 		ResultSet resultSet;
 		try {
@@ -180,7 +180,8 @@ public class DatabaseUtlity {
 			resultSet = ps.executeQuery();
 			while (resultSet.next()) {
 				 userId =  resultSet.getString("userId");
-				 setUserId(userId);
+				DatabaseConnector.getInstance().setUserId(userId);
+				 
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -188,5 +189,25 @@ public class DatabaseUtlity {
 		}
 		
 	}
+	public List<Movie> showMovieHistory() {
+			StringBuilder sb = new StringBuilder();
+			String sqlQuery = "";
+			ResultSet resultSet;
+			List<Movie> movieList = new ArrayList<Movie>();
+			try {
+				Statement statement = connection.createStatement();
+				PreparedStatement ps = null;
+				sqlQuery = "select  M.title, R.rating as \"avg\" \r\n" + 
+			 		"from public.\"Ratings\" R, public.\"Movies\" M, public.\"User\" U\r\n" + 
+			 		"where R.movieid=M.movieid and U.\"userId\"=R.userid and U.\"userId\"= ?";
+				ps = connection.prepareStatement(sqlQuery);
+				ps.setInt(1, DatabaseConnector.getInstance().getUserId());
+				resultSet = ps.executeQuery();
+				addToMovieList(resultSet, movieList);
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return movieList;
+		}
 	
 }
