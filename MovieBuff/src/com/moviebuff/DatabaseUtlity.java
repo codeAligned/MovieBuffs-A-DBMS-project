@@ -17,6 +17,17 @@ public class DatabaseUtlity {
 	public static final String NAME = "0";
 	public static final String TAG = "1";
 	
+	
+	private String userId;
+	
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
 	public DatabaseUtlity(Connection con) {
 		// TODO Auto-generated constructor stub
 		this.connection = con;
