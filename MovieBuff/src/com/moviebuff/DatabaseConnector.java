@@ -9,6 +9,16 @@ public class DatabaseConnector {
 	private static DatabaseConnector databaseConnectionInstance = null;
 	
 	public Connection con;
+	
+	private Integer userId;
+	
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 	private DatabaseConnector() {
 		try {
 			con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "root");
