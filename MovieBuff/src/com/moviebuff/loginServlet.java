@@ -62,6 +62,9 @@ public class loginServlet extends HttpServlet {
 		Connection con = DatabaseConnector.getInstance().con;
 		DatabaseUtlity utility = new DatabaseUtlity(con);
 		String result = utility.verifyPassword(userName, userPassword);
+		if(result.equals(LOGIN_SUCCESS)) {
+			utility.fetchUserId(userName);
+		}
 		return result;
 		
 	}
