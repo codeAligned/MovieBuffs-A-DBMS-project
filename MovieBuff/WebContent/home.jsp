@@ -51,6 +51,11 @@ Enter search string here: <input type="text" name="searchValue" size="20" >
 
 
    </form>
+	
+<form action="showmoviehistory" method="post">
+   <input type="submit" id="showMovieHistoryButton" value="Show History" />
+
+</form>	
    
 <form action="Top100RatedMovies" method="post">
   <INPUT TYPE="submit" VALUE="Get top 100 movies" />
