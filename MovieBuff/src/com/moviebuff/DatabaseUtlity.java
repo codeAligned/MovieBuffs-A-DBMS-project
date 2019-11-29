@@ -155,4 +155,27 @@ public class DatabaseUtlity {
 		
 	}
 	
+	public void fetchUserId(String userName) {
+		String userId = "";
+		String sqlQuery = "";
+		ResultSet resultSet;
+		try {
+			Statement statement = connection.createStatement();
+			PreparedStatement ps = null;
+			sqlQuery = "select  U.\"userId\" from public.\"User\" U\r\n" + 
+					"where U.email_id = ?";
+			ps = connection.prepareStatement(sqlQuery);
+			ps.setString(1, userName);
+			resultSet = ps.executeQuery();
+			while (resultSet.next()) {
+				 userId =  resultSet.getString("userId");
+				 setUserId(userId);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 }
