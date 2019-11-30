@@ -60,5 +60,9 @@ Enter search string here: <input type="text" name="searchValue" size="20" >
 <form action="Top100RatedMovies" method="post">
   <INPUT TYPE="submit" VALUE="Get top 100 movies" />
  </form>	
+ 
+ <form action="RecommendationServlet" method="post">
+  <INPUT TYPE="submit" VALUE="Get Recommendation" />
+</form>
 </body>
 </html>
