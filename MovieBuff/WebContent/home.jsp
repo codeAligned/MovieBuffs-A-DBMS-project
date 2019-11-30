@@ -17,6 +17,12 @@ $(document).ready(function(){
   	});
 });
 
+$(document).ready(function(){
+    $('#movieGenre').click(function(){
+        $('#movieGenreButton').show();
+    });
+});
+
 
 </script>
 </head>
@@ -59,7 +65,39 @@ Enter search string here: <input type="text" name="searchValue" size="20" >
    
 <form action="Top100RatedMovies" method="post">
   <INPUT TYPE="submit" VALUE="Get top 100 movies" />
- </form>	
+ </form>
+ 
+ <h1>Genre Based Top 10 Movies </h1>
+<h2>Please select at most three genre names</h2>
+
+<form name="genreList" action="moviegenre10list" method="post">
+<input type="button" id="movieGenre" value="Get Movies By Genre" />
+<br>
+<div id="movieGenreButton" style="display: none;"> 
+<p>
+<input type="checkbox" name="genre_name" value="Adventure">Adventure<br>
+<input type="checkbox" name="genre_name" value="Animation">Animation<br>
+<input type="checkbox" name="genre_name" value="Children">Children<br>
+<input type="checkbox" name="genre_name" value="Comedy">Comedy<br>
+<input type="checkbox" name="genre_name" value="Fantasy">Fantasy<br>
+<input type="checkbox" name="genre_name" value="Romance">Romance<br>
+<input type="checkbox" name="genre_name" value="Drama">Drama<br>
+<input type="checkbox" name="genre_name" value="Action">Action<br>
+<input type="checkbox" name="genre_name" value="Crime">Crime<br>
+<input type="checkbox" name="genre_name" value="Thriller">Thriller<br>
+<input type="checkbox" name="genre_name" value="Horror">Horror<br>
+<input type="checkbox" name="genre_name" value="Mystery">Mystery<br>
+<input type="checkbox" name="genre_name" value="Sci-Fi">Sci-Fi<br>
+<input type="checkbox" name="genre_name" value="War">War<br>
+<input type="checkbox" name="genre_name" value="Musical">Musical<br>
+<input type="checkbox" name="genre_name" value="Documentary">Documentary<br>
+<input type="checkbox" name="genre_name" value="IMAX">IMAX<br>
+<input type="checkbox" name="genre_name" value="Western">Western<br>
+<input type="checkbox" name="genre_name" value="Film-Noir">Film-Noir</p>
+<br><br>
+<input type="submit" name= "submit" value="Submit"> 
+</div>
+</form>	
  
  <form action="RecommendationServlet" method="post">
   <INPUT TYPE="submit" VALUE="Get Recommendation" />
